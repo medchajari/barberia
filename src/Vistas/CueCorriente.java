@@ -1,0 +1,500 @@
+
+package Vistas;
+
+import Entidades.Barbero;
+import Entidades.Cliente;
+import Entidades.CuentaCorriente;
+import Entidades.DetalleCuentaCorriente;
+import Entidades.PagoCuentaCorriente;
+import Metodos.BarberoData;
+import Metodos.ClienteData;
+import Metodos.CuentaCorrienteData;
+import Metodos.PagoCuentaCorrienteData;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Date;
+import java.util.List;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
+
+public class CueCorriente extends javax.swing.JFrame {
+private Cliente cliente;
+   private ClienteData clienteData;
+   private Barbero barbero;
+   private BarberoData barberoData;
+   private CuentaCorrienteData cuentaCorrienteData;
+   
+    public CueCorriente() {
+        initComponents();
+         cliente = new Cliente();
+          clienteData = new ClienteData();
+         barbero = new Barbero();
+         barberoData = new BarberoData();
+          cuentaCorrienteData = new CuentaCorrienteData(); 
+          llenarComboBoxBarberos();
+          llenarComboBoxClientes();
+          
+
+
+//// Agregar ActionListener al botón btnDetalle
+// btnDetalle.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                Cliente clienteSeleccionado = (Cliente) cbxClientes.getSelectedItem();
+//
+//                if (clienteSeleccionado != null) {
+//                    int idCliente = clienteSeleccionado.getIdCliente();
+//                    CuentaCorrienteData cuentaCorrienteData = new CuentaCorrienteData();
+//                    List<CuentaCorriente> cuentas = cuentaCorrienteData.listarCuentasPorCliente(idCliente);
+//
+//                    // Aquí es donde llenamos la tabla con las cuentas y sus detalles
+//                    llenarTablaCuentas(cuentas);
+//
+//                } else {
+//                    JOptionPane.showMessageDialog(null, "Por favor selecciona un cliente.", "Error", JOptionPane.ERROR_MESSAGE);
+//                }
+//            }
+//        });
+ 
+ 
+ btnDetalle.addActionListener(new ActionListener() {
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        Cliente clienteSeleccionado = (Cliente) cbxClientes.getSelectedItem();
+
+        if (clienteSeleccionado != null) {
+            int idCliente = clienteSeleccionado.getIdCliente();
+            CuentaCorrienteData cuentaCorrienteData = new CuentaCorrienteData();
+            PagoCuentaCorrienteData pagoCuentaCorrienteData = new PagoCuentaCorrienteData();
+
+            List<CuentaCorriente> cuentas = cuentaCorrienteData.listarCuentasPorCliente(idCliente);
+            List<PagoCuentaCorriente> pagos = pagoCuentaCorrienteData.listarPagosPorCliente(idCliente);
+
+            // Aquí es donde llenamos la tabla con las cuentas, sus detalles y los pagos
+            llenarTablaCuentasYPagos(cuentas, pagos);
+
+        } else {
+            JOptionPane.showMessageDialog(null, "Por favor selecciona un cliente.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+});
+
+ // Ejemplo de implementación en la clase CueCorriente
+
+btnRegistrarPago.addActionListener(new ActionListener() {
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        Cliente clienteSeleccionado = (Cliente) cbxClientes.getSelectedItem();
+        Barbero barberoSeleccionado = (Barbero) cbxBarbero.getSelectedItem();
+        double montoPago = Double.parseDouble(txtMonto.getText());
+        
+        if (clienteSeleccionado != null && barberoSeleccionado != null) {
+            CuentaCorriente cuentaCorriente = cuentaCorrienteData.obtenerCuentaPorCliente(clienteSeleccionado.getIdCliente());
+            if (cuentaCorriente != null) {
+                PagoCuentaCorriente pago = new PagoCuentaCorriente();
+                pago.setCuentaCorriente(cuentaCorriente);
+                pago.setCliente(clienteSeleccionado);
+                pago.setBarbero(barberoSeleccionado);
+                pago.setPago(montoPago);
+                pago.setFechaPago(new Date());
+                
+                PagoCuentaCorrienteData pagoData = new PagoCuentaCorrienteData();
+                boolean exito = pagoData.registrarPago(pago);
+                
+                if (exito) {
+                    JOptionPane.showMessageDialog(null, "Pago registrado exitosamente.");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Error al registrar el pago.");
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "No se encontró una cuenta corriente para el cliente seleccionado.");
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Por favor selecciona un cliente y un barbero.");
+        }
+    }
+});
+
+
+    }
+    
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jPanel1 = new javax.swing.JPanel();
+        jTextField1 = new javax.swing.JTextField();
+        cbxClientes = new javax.swing.JComboBox<>();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tableCC = new javax.swing.JTable();
+        fondo = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        cbxBarbero = new javax.swing.JComboBox<>();
+        jLabel2 = new javax.swing.JLabel();
+        btnListarCCPorBarbero = new javax.swing.JButton();
+        btnDetalle = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        btnRegistrarPago = new javax.swing.JButton();
+        btnAgregarCC = new javax.swing.JButton();
+        txtDescripcion = new javax.swing.JTextField();
+        txtMonto = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JSeparator();
+        jSeparator2 = new javax.swing.JSeparator();
+        txtSaldo = new javax.swing.JTextField();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setUndecorated(true);
+        setPreferredSize(new java.awt.Dimension(1020, 460));
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setMinimumSize(new java.awt.Dimension(1020, 460));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jTextField1.setBackground(new java.awt.Color(214, 183, 153));
+        jTextField1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jTextField1.setForeground(new java.awt.Color(255, 255, 255));
+        jTextField1.setText("Cuenta Corriente");
+        jPanel1.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 30, -1, -1));
+
+        jPanel1.add(cbxClientes, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 60, 260, 40));
+
+        tableCC.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "idCC", "Cliente", "Saldo", "Barbero", "Fecha", "Detalle", "CC", "Pagos"
+            }
+        ));
+        jScrollPane1.setViewportView(tableCC);
+        if (tableCC.getColumnModel().getColumnCount() > 0) {
+            tableCC.getColumnModel().getColumn(0).setMinWidth(20);
+            tableCC.getColumnModel().getColumn(0).setPreferredWidth(20);
+            tableCC.getColumnModel().getColumn(0).setMaxWidth(20);
+            tableCC.getColumnModel().getColumn(1).setMinWidth(90);
+            tableCC.getColumnModel().getColumn(1).setPreferredWidth(90);
+            tableCC.getColumnModel().getColumn(1).setMaxWidth(90);
+            tableCC.getColumnModel().getColumn(2).setMinWidth(70);
+            tableCC.getColumnModel().getColumn(2).setPreferredWidth(70);
+            tableCC.getColumnModel().getColumn(2).setMaxWidth(70);
+            tableCC.getColumnModel().getColumn(3).setMinWidth(80);
+            tableCC.getColumnModel().getColumn(3).setPreferredWidth(80);
+            tableCC.getColumnModel().getColumn(3).setMaxWidth(80);
+            tableCC.getColumnModel().getColumn(4).setMinWidth(80);
+            tableCC.getColumnModel().getColumn(4).setPreferredWidth(80);
+            tableCC.getColumnModel().getColumn(4).setMaxWidth(80);
+            tableCC.getColumnModel().getColumn(6).setMinWidth(60);
+            tableCC.getColumnModel().getColumn(6).setPreferredWidth(60);
+            tableCC.getColumnModel().getColumn(6).setMaxWidth(60);
+            tableCC.getColumnModel().getColumn(7).setMinWidth(60);
+            tableCC.getColumnModel().getColumn(7).setPreferredWidth(60);
+            tableCC.getColumnModel().getColumn(7).setMaxWidth(60);
+        }
+
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 80, 610, 350));
+
+        fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/fondos/20x.jpg"))); // NOI18N
+        jPanel1.add(fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 700, 460));
+
+        jLabel1.setText("Cliente");
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 40, -1, -1));
+
+        jPanel1.add(cbxBarbero, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 330, 260, 40));
+
+        jLabel2.setText("Mostrar CC por Barbero");
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 310, -1, -1));
+
+        btnListarCCPorBarbero.setText("LISTAR");
+        jPanel1.add(btnListarCCPorBarbero, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 390, 140, 50));
+
+        btnDetalle.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/22/lista (1).png"))); // NOI18N
+        btnDetalle.setText("  DETALLE");
+        jPanel1.add(btnDetalle, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 110, 130, 30));
+
+        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/32/boton.png"))); // NOI18N
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(890, 390, 100, 50));
+
+        btnRegistrarPago.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/22/verificado.png"))); // NOI18N
+        btnRegistrarPago.setText("  Abonar");
+        jPanel1.add(btnRegistrarPago, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 240, 130, 40));
+
+        btnAgregarCC.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/22/subir.png"))); // NOI18N
+        btnAgregarCC.setText("  Agregar ");
+        btnAgregarCC.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarCCActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnAgregarCC, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 240, 120, 40));
+
+        txtDescripcion.setBorder(null);
+        jPanel1.add(txtDescripcion, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 150, 200, 30));
+
+        txtMonto.setBorder(null);
+        txtMonto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtMontoActionPerformed(evt);
+            }
+        });
+        jPanel1.add(txtMonto, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 190, 200, -1));
+
+        jLabel3.setText("Descrip :");
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 160, -1, -1));
+
+        jLabel4.setText("Monto :");
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 190, -1, -1));
+        jPanel1.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 210, 200, 10));
+        jPanel1.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 180, 200, 10));
+
+        txtSaldo.setForeground(new java.awt.Color(153, 0, 0));
+        jPanel1.add(txtSaldo, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 110, 100, 30));
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1024, Short.MAX_VALUE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        pack();
+        setLocationRelativeTo(null);
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+      dispose();
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void btnAgregarCCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarCCActionPerformed
+
+
+  Cliente clienteSeleccionado = (Cliente) cbxClientes.getSelectedItem();
+    Barbero barberoSeleccionado = (Barbero) cbxBarbero.getSelectedItem();
+    
+    if (clienteSeleccionado != null && barberoSeleccionado != null) {
+        // Obtener o crear la cuenta corriente del cliente
+        CuentaCorriente cuenta = cuentaCorrienteData.obtenerCuentaPorCliente(clienteSeleccionado.getIdCliente());
+
+        if (cuenta == null) {
+            // Si no existe la cuenta, la creamos
+            cuenta = new CuentaCorriente(clienteSeleccionado, barberoSeleccionado, 0);
+            cuentaCorrienteData.agregarCuentaCorriente(cuenta);
+            cuenta = cuentaCorrienteData.obtenerCuentaPorCliente(clienteSeleccionado.getIdCliente());
+        }
+
+        // Crear el detalle de la cuenta corriente
+        DetalleCuentaCorriente detalle = new DetalleCuentaCorriente();
+        detalle.setCuentaCorriente(cuenta);
+        detalle.setBarbero(barberoSeleccionado); // Asignar el barbero al detalle
+        detalle.setMonto(Double.parseDouble(txtMonto.getText()));
+        detalle.setDescripcion(txtDescripcion.getText());
+        detalle.setFechaMovimiento(new Date());
+
+        // Agregar el detalle a la base de datos
+        cuentaCorrienteData.agregarDetalleCuentaCorriente(detalle);
+
+        // Actualizar el saldo de la cuenta corriente
+        cuentaCorrienteData.actualizarSaldo(cuenta.getIdCuentaCorriente(), detalle.getMonto());
+
+        // Mostrar un mensaje de confirmación
+        JOptionPane.showMessageDialog(this, "Movimiento agregado correctamente.");
+    } else {
+        // Mostrar un mensaje de error si no se seleccionaron cliente y barbero
+        JOptionPane.showMessageDialog(this, "Por favor, seleccione un cliente y un barbero.");
+    }
+    }//GEN-LAST:event_btnAgregarCCActionPerformed
+
+    private void txtMontoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMontoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtMontoActionPerformed
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(CueCorriente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(CueCorriente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(CueCorriente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(CueCorriente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new CueCorriente().setVisible(true);
+            }
+        });
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAgregarCC;
+    private javax.swing.JButton btnDetalle;
+    private javax.swing.JButton btnListarCCPorBarbero;
+    private javax.swing.JButton btnRegistrarPago;
+    private javax.swing.JComboBox<Barbero> cbxBarbero;
+    private javax.swing.JComboBox<Cliente> cbxClientes;
+    private javax.swing.JLabel fondo;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTable tableCC;
+    private javax.swing.JTextField txtDescripcion;
+    private javax.swing.JTextField txtMonto;
+    private javax.swing.JTextField txtSaldo;
+    // End of variables declaration//GEN-END:variables
+
+private void llenarComboBoxBarberos() {
+    List<Barbero> barb = barberoData.listarBarberos();
+    DefaultComboBoxModel<Barbero> model = new DefaultComboBoxModel<>();
+
+    // Agregar un elemento vacío al inicio
+    model.addElement(null);
+
+    for (Barbero barbero : barb) {
+        model.addElement(barbero);
+    }
+
+    cbxBarbero.setModel(model);
+
+    // Configurar el renderizado del JComboBox para mostrar apellido, nombre
+    cbxBarbero.setRenderer(new javax.swing.DefaultListCellRenderer() {
+        @Override
+        public java.awt.Component getListCellRendererComponent(
+                javax.swing.JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+            if (value instanceof Barbero) {
+                Barbero barbero = (Barbero) value;
+                value = barbero.getNombreBarbero()+" "+ barbero.getIdBarbero();
+                
+            } else if (value == null) {
+                value = ""; // Mostrar una cadena vacía para el elemento vacío
+            }
+            return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+        }
+    });
+}
+
+private void llenarComboBoxClientes() {
+    List<Cliente> clie = clienteData.listarCliente();
+    DefaultComboBoxModel<Cliente> model = new DefaultComboBoxModel<>();
+
+    // Agregar un elemento vacío al inicio
+    model.addElement(null);
+
+    for (Cliente cliente : clie) {
+        model.addElement(cliente);
+    }
+
+    cbxClientes.setModel(model);
+
+    // Configurar el renderizado del JComboBox para mostrar apellido, nombre
+    cbxClientes.setRenderer(new javax.swing.DefaultListCellRenderer() {
+        @Override
+        public java.awt.Component getListCellRendererComponent(
+                javax.swing.JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+            if (value instanceof Cliente) {
+                Cliente cliente = (Cliente) value;
+                value = cliente.getNombre()+" "+ cliente.getIdCliente();
+                
+            } else if (value == null) {
+                value = ""; // Mostrar una cadena vacía para el elemento vacío
+            }
+            return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+        }
+    });
+}
+
+
+
+private void llenarTablaCuentasYPagos(List<CuentaCorriente> cuentas, List<PagoCuentaCorriente> pagos) {
+    DefaultTableModel model = (DefaultTableModel) tableCC.getModel();
+    model.setRowCount(0); // Limpiar la tabla antes de agregar nuevos datos
+
+    // Llenar la tabla con las cuentas corrientes y sus detalles
+    for (CuentaCorriente cuenta : cuentas) {
+        // Añadir la fila de la cuenta corriente
+        Object[] rowData = {
+            cuenta.getIdCuentaCorriente(),
+            cuenta.getCliente().getNombre(), // Mostrar el nombre del barbero que hizo la cuenta corriente
+            cuenta.getSaldo(),
+            "", "", "", ""  // Espacios vacíos para detalles de la cuenta
+        };
+        model.addRow(rowData);
+
+        // Añadir filas para cada detalle de la cuenta corriente
+        for (DetalleCuentaCorriente detalle : cuenta.getDetalles()) {
+            Object[] detalleRowData = {
+               
+                "", // Columna vacía para 'Cliente'
+                "", // Columna vacía para 'Saldo'
+                "", // Columna vacía para 'Saldo'
+                detalle.getBarbero().getNombreBarbero(),
+                detalle.getFechaMovimiento(),
+                detalle.getDescripcion(),
+                detalle.getMonto()
+            };
+            model.addRow(detalleRowData);
+        }
+    }
+
+    // Llenar la tabla con los pagos
+    for (PagoCuentaCorriente pago : pagos) {
+        Object[] pagoRowData = {
+            pago.getCuentaCorriente().getIdCuentaCorriente(),
+            pago.getCliente().getNombre(),
+               "", // Saldo vacío
+                  
+            pago.getBarbero().getNombreBarbero(), // Mostrar el barbero asociado con el pago
+            
+            pago.getFechaPago(),
+            "", // Saldo vacío
+             "", // Saldo vacío
+            pago.getPago() * -1 // Mostrar el pago como un monto negativo
+                
+        };
+        model.addRow(pagoRowData);
+    }
+}
+
+}
